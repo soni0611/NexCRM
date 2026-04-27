@@ -22,6 +22,7 @@ export const rejectBid = (id) => api.put(`/bids/${id}/reject`).then(r => r.data)
 export const getAssignments = (params) => api.get('/assignments', { params }).then(r => r.data);
 export const createAssignment = (data) => api.post('/assignments', data).then(r => r.data);
 export const updateAssignment = (id, data) => api.put(`/assignments/${id}`, data).then(r => r.data);
+export const deleteAssignment = (id) => api.delete(`/assignments/${id}`).then(r => r.data);
 
 // Stage Progress
 export const getStageProgress = (params) => api.get('/stage-progress', { params }).then(r => r.data);

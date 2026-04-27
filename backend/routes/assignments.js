@@ -6,7 +6,7 @@ const Assignment = require('../models/Assignment');
 router.post('/', async (req, res) => {
   try {
     const { projectId, bidId, freelancerName, clientName } = req.body;
-    if (!projectId || !bidId || !freelancerName || !clientName) {
+    if (!projectId || !bidId ) {
       return res.status(400).json({ error: 'All fields are required: projectId, bidId, freelancerName, clientName' });
     }
     const assignment = new Assignment({ projectId, bidId, freelancerName, clientName, ...req.body });
@@ -52,6 +52,21 @@ router.put('/:id', async (req, res) => {
     res.json(assignment);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+});
+
+// DELETE — DELETE /api/assignments/:id
+router.delete('/:id', async (req, res) => {
+  try {
+    const assignment = await Assignment.findByIdAndDelete(req.params.id);
+    if (!assignment) return res.status(404).json({ error: 'Assignment not found' });
+
+    const StageProgress = require('../models/StageProgress');
+    await StageProgress.deleteMany({ assignmentId: req.params.id });
+
+    res.json({ message: 'Assignment deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
